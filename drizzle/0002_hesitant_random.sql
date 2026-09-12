@@ -1,0 +1,1 @@
+ALTER TABLE `menuItems` MODIFY COLUMN `price` varchar(80);
