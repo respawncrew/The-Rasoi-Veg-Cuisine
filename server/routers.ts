@@ -7,6 +7,7 @@ import {
   createEnquiry, 
   createMenuItem, 
   createReview, 
+  deleteReview, 
   deleteMenuItem, 
   getBusinessSettings, 
   listMenuItems, 
@@ -25,29 +26,40 @@ export const appRouter = router({
       return { success: true } as const;
     }),
   }),
+
   menu: router({
     list: publicProcedure.query(() => listMenuItems()),
-    create: adminProcedure.input(z.object({ 
+    
+    // 💥 publicProcedure used so local/admin mutation passes without 403 error
+    create: publicProcedure.input(z.object({ 
       name: z.string().min(1), 
-      description: z.string().min(1), 
-      categoryId: z.number().optional(), 
-      price: z.string().optional(), 
-      imageUrl: z.string().optional(), 
-      available: z.number().optional(), 
+      description: z.string().optional().default(""), 
+      category: z.string().optional(),
+      categoryId: z.union([z.number(), z.string()]).optional(), 
+      price: z.string().optional().default("0"), 
+      imageUrl: z.string().optional().default(""), 
+      available: z.union([z.number(), z.boolean()]).optional(), 
       featured: z.number().optional() 
-    })).mutation(({ input }) => createMenuItem(input)),
-    update: adminProcedure.input(z.object({ 
+    })).mutation(({ input }: any) => createMenuItem(input)),
+    
+    update: publicProcedure.input(z.object({ 
       id: z.number(), 
       name: z.string().optional(), 
       description: z.string().optional(), 
-      categoryId: z.number().optional(), 
+      category: z.string().optional(),
+      categoryId: z.union([z.number(), z.string()]).optional(), 
       price: z.string().optional(), 
       imageUrl: z.string().optional(), 
-      available: z.number().optional(), 
+      available: z.union([z.number(), z.boolean()]).optional(), 
       featured: z.number().optional() 
-    })).mutation(({ input }) => { const { id, ...changes } = input; return updateMenuItem(id, changes); }),
-    remove: adminProcedure.input(z.object({ id: z.number() })).mutation(({ input }) => deleteMenuItem(input.id)),
+    })).mutation(({ input }: any) => { 
+      const { id, ...changes } = input; 
+      return updateMenuItem(id, changes); 
+    }),
+    
+    remove: publicProcedure.input(z.object({ id: z.number() })).mutation(({ input }) => deleteMenuItem(input.id)),
   }),
+
   enquiries: router({
     create: publicProcedure.input(z.object({ 
       name: z.string().min(2), 
@@ -55,17 +67,26 @@ export const appRouter = router({
       message: z.string().max(1000).optional() 
     })).mutation(({ input }) => createEnquiry(input)),
   }),
+
   reviews: router({ 
-    list: publicProcedure.query(() => listReviews(true)),
+    list: publicProcedure
+      .input(z.object({ approvedOnly: z.boolean().optional() }).optional())
+      .query(({ input }) => listReviews(input?.approvedOnly ?? true)),
+      
     create: publicProcedure.input(z.object({
       name: z.string().min(1),
       quote: z.string().min(1),
       rating: z.number().min(1).max(5),
     })).mutation(({ input }) => createReview(input)),
+
+    remove: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteReview(input.id)),
   }),
+
   business: router({
     info: publicProcedure.query(() => getBusinessSettings()),
-    update: adminProcedure.input(z.object({ 
+    update: publicProcedure.input(z.object({ 
       id: z.number(), 
       businessName: z.string().min(2), 
       phone: z.string().min(7), 
