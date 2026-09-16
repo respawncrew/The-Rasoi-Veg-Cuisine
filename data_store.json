@@ -1,0 +1,858 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Aman Verma",
+      "quote": "Amazing food and super fast packaging!",
+      "rating": 5,
+      "approved": 1,
+      "createdAt": "2026-09-16T11:26:33.009Z"
+    }
+  ],
+  "menu": [
+    {
+      "id": 1,
+      "name": "Aloo Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Tawa-roasted paratha stuffed with spiced potato.",
+      "price": "₹50",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 2,
+      "name": "Aloo Pyaaz Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Potato and onion stuffed paratha, cooked on the tawa.",
+      "price": "₹65",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 3,
+      "name": "Masala Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Layered paratha with our everyday masala.",
+      "price": "₹70",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 4,
+      "name": "Lachha Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Flaky, hand-layered paratha from the tawa.",
+      "price": "₹75",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 5,
+      "name": "Mix Veg. Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Seasonal vegetables folded into a crisp paratha.",
+      "price": "₹85",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 6,
+      "name": "Paneer Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Soft paneer filling with gentle spices.",
+      "price": "₹95",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 7,
+      "name": "Paneer Pyaaz Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Paneer and onion filling, fresh from the tawa.",
+      "price": "₹85",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 8,
+      "name": "Plain Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Simple, crisp, everyday paratha.",
+      "price": "₹25",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 9,
+      "name": "Plain Desi Ghee Paratha (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Plain paratha finished with desi ghee.",
+      "price": "₹40",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 10,
+      "name": "Tawa Roti (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Soft roti cooked fresh on the tawa.",
+      "price": "₹12",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 11,
+      "name": "Desi Ghee Tawa Roti (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Fresh tawa roti with a desi ghee finish.",
+      "price": "₹15",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 12,
+      "name": "Butter Tawa Roti (1 pcs.)",
+      "category": "Breads & Parathas",
+      "description": "Tawa roti finished with butter.",
+      "price": "₹17",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 13,
+      "name": "Aloo Jeera",
+      "category": "Main Course / Sabji",
+      "description": "Potatoes tossed with cumin and homestyle spices.",
+      "price": "Half ₹80 · Full ₹130",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 14,
+      "name": "Baingan Bharta",
+      "category": "Main Course / Sabji",
+      "description": "Roasted eggplant cooked down with tomato and spices.",
+      "price": "Half ₹100 · Full ₹160",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 15,
+      "name": "Aloo Gobhi",
+      "category": "Main Course / Sabji",
+      "description": "Potato and cauliflower sabji, cooked the ghar-style way.",
+      "price": "Half ₹100 · Full ₹165",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 16,
+      "name": "Mix Veg.",
+      "category": "Main Course / Sabji",
+      "description": "A colourful mix of vegetables in a light masala.",
+      "price": "Half ₹135 · Full ₹195",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 17,
+      "name": "Lauki Ke Kofte",
+      "category": "Main Course / Sabji",
+      "description": "Soft bottle-gourd koftas in a comforting gravy.",
+      "price": "Half ₹95 · Full ₹160",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 18,
+      "name": "Matar Mashroom",
+      "category": "Main Course / Sabji",
+      "description": "Green peas and mushrooms in a home-style gravy.",
+      "price": "Half ₹150 · Full ₹275",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 19,
+      "name": "Matar Paneer",
+      "category": "Main Course / Sabji",
+      "description": "Paneer and peas in a gently spiced tomato gravy.",
+      "price": "Half ₹165 · Full ₹230",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 20,
+      "name": "Paneer Bhurji",
+      "category": "Main Course / Sabji",
+      "description": "Crumbled paneer with onion, tomato and fresh coriander.",
+      "price": "Half ₹195 · Full ₹270",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 21,
+      "name": "Kadhai Paneer",
+      "category": "Main Course / Sabji",
+      "description": "Paneer with peppers and roasted kadhai masala.",
+      "price": "Half ₹155 · Full ₹240",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 22,
+      "name": "Sahi Paneer",
+      "category": "Main Course / Sabji",
+      "description": "Paneer in a smooth, mildly spiced gravy.",
+      "price": "Half ₹185 · Full ₹300",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 23,
+      "name": "Paneer Butter Masala",
+      "category": "Main Course / Sabji",
+      "description": "Paneer in a buttery tomato masala.",
+      "price": "Half ₹195 · Full ₹300",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 24,
+      "name": "Dal Fry",
+      "category": "Main Course / Sabji",
+      "description": "Yellow dal finished with a fresh tadka.",
+      "price": "Half ₹80 · Full ₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 25,
+      "name": "Desi Ghee Dal Tadka",
+      "category": "Main Course / Sabji",
+      "description": "Dal with a fragrant desi ghee tempering.",
+      "price": "Half ₹90 · Full ₹165",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 26,
+      "name": "Plain Maggi",
+      "category": "Maggi & Snacks",
+      "description": "Classic Maggi, made hot to order.",
+      "price": "₹60",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 27,
+      "name": "Veg. Maggi",
+      "category": "Maggi & Snacks",
+      "description": "Maggi tossed with fresh vegetables.",
+      "price": "₹80",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 28,
+      "name": "Veg. Fried Maggi",
+      "category": "Maggi & Snacks",
+      "description": "Wok-tossed Maggi with vegetables and spice.",
+      "price": "₹95",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 29,
+      "name": "Veg. Fried Butter Maggi",
+      "category": "Maggi & Snacks",
+      "description": "Fried Maggi with vegetables and a buttery finish.",
+      "price": "₹110",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 30,
+      "name": "Mix Veg. Besan Chilla",
+      "category": "Maggi & Snacks",
+      "description": "Savoury besan chilla packed with vegetables.",
+      "price": "1 pc ₹70 · 2 pcs ₹120",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 31,
+      "name": "Peanut Veg. Poha",
+      "category": "Maggi & Snacks",
+      "description": "Light poha with peanuts, vegetables and lemon.",
+      "price": "Half ₹65 · Full ₹110",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 32,
+      "name": "Veg. Vermiceli (Javain)",
+      "category": "Maggi & Snacks",
+      "description": "Tempered vegetable vermicelli for a light meal.",
+      "price": "Half ₹70 · Full ₹105",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 33,
+      "name": "Plain Bread Pakoda (8 pcs.)",
+      "category": "Maggi & Snacks",
+      "description": "Crisp bread pakoda with a spiced besan coating.",
+      "price": "₹75",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 34,
+      "name": "Aloo Pakoda (250 gm)",
+      "category": "Maggi & Snacks",
+      "description": "Golden potato pakoda, fried fresh.",
+      "price": "₹85",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 35,
+      "name": "Aloo Pyaaz Pakoda (250 gm)",
+      "category": "Maggi & Snacks",
+      "description": "Potato and onion pakoda with a crisp bite.",
+      "price": "₹105",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 36,
+      "name": "Mix.Veg. Sandwich (2 pcs.)",
+      "category": "Maggi & Snacks",
+      "description": "Vegetable sandwich, made for a quick snack.",
+      "price": "₹85",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 37,
+      "name": "Aloo Bread Pakoda (2 pcs.)",
+      "category": "Maggi & Snacks",
+      "description": "Bread pakoda filled with spiced potato.",
+      "price": "₹90",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 38,
+      "name": "Grilled Aloo Sandwich (2 pcs.)",
+      "category": "Maggi & Snacks",
+      "description": "Grilled bread with a hearty potato filling.",
+      "price": "₹80",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 39,
+      "name": "Peanut Chat",
+      "category": "Maggi & Snacks",
+      "description": "Peanuts tossed with fresh vegetables and chutney.",
+      "price": "₹145",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 40,
+      "name": "Sweet Corn Chat",
+      "category": "Maggi & Snacks",
+      "description": "Sweet corn with a bright, tangy masala.",
+      "price": "Half ₹60 · Full ₹100",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 41,
+      "name": "Healthy Sprouts Chat",
+      "category": "Maggi & Snacks",
+      "description": "Fresh sprouts with vegetables and a light dressing.",
+      "price": "₹70",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 42,
+      "name": "Healthy Veg. Upma",
+      "category": "Maggi & Snacks",
+      "description": "Soft vegetable upma with a gentle tempering.",
+      "price": "₹80",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 43,
+      "name": "Bhel Puri",
+      "category": "Maggi & Snacks",
+      "description": "Puffed rice, chutneys and crunchy sev.",
+      "price": "₹70",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 44,
+      "name": "Plain Rice + Dal Fry",
+      "category": "Rice, Combos & Thalis",
+      "description": "Everyday rice and dal, warm and comforting.",
+      "price": "₹100",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 45,
+      "name": "Jeera Rice + Desi Ghee Dal Tadka",
+      "category": "Rice, Combos & Thalis",
+      "description": "Cumin rice with a desi ghee dal tadka.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 46,
+      "name": "Plain Rice",
+      "category": "Rice, Combos & Thalis",
+      "description": "Steamed rice for your sabji or dal.",
+      "price": "₹60",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 47,
+      "name": "Jeera Rice",
+      "category": "Rice, Combos & Thalis",
+      "description": "Steamed rice scented with cumin.",
+      "price": "₹75",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 48,
+      "name": "Curd Rice",
+      "category": "Rice, Combos & Thalis",
+      "description": "Cool, gentle curd rice with a light tempering.",
+      "price": "₹105",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 49,
+      "name": "Moongdal Khichdi with Ghee",
+      "category": "Rice, Combos & Thalis",
+      "description": "Comforting moong dal khichdi with ghee.",
+      "price": "Half ₹135 · Full ₹200",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 50,
+      "name": "Maggi Masala Veg.Fried Rice",
+      "category": "Rice, Combos & Thalis",
+      "description": "Vegetable fried rice with masala comfort.",
+      "price": "₹110",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 51,
+      "name": "2 Desi Ghee Paratha + Paneer Bhurji",
+      "category": "Rice, Combos & Thalis",
+      "description": "Two ghee parathas with paneer bhurji.",
+      "price": "₹240",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 52,
+      "name": "2 Desi Ghee Paratha + Matar Paneer",
+      "category": "Rice, Combos & Thalis",
+      "description": "Two ghee parathas with matar paneer.",
+      "price": "₹200",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 53,
+      "name": "Plain Thali",
+      "category": "Rice, Combos & Thalis",
+      "description": "4 desi ghee tawa roti, rice, aloo jeera, dal fry and salad.",
+      "price": "₹130",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 54,
+      "name": "Standard Thali",
+      "category": "Rice, Combos & Thalis",
+      "description": "4 desi ghee tawa roti, rice, aloo jeera, dal fry, raita and salad.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 55,
+      "name": "Special Jain Thali (Without Onion & Garlic)",
+      "category": "Rice, Combos & Thalis",
+      "description": "4 ghee rotis, rice, matar paneer, dal fry and salad.",
+      "price": "₹220",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 56,
+      "name": "Small Amul Butter Cube (1 pcs.)",
+      "category": "Extras & Beverages",
+      "description": "A little extra butter for your paratha or roti.",
+      "price": "₹10",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 57,
+      "name": "Plain Curd",
+      "category": "Extras & Beverages",
+      "description": "Cool plain curd, made for the side.",
+      "price": "₹35",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 58,
+      "name": "Boondi Raita",
+      "category": "Extras & Beverages",
+      "description": "Whisked curd with boondi and seasoning.",
+      "price": "₹65",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 59,
+      "name": "Mix Veg. Raita",
+      "category": "Extras & Beverages",
+      "description": "Curd with fresh vegetables and herbs.",
+      "price": "₹80",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 60,
+      "name": "Beetroot Raita",
+      "category": "Extras & Beverages",
+      "description": "Cool curd with beetroot and gentle spice.",
+      "price": "₹65",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 61,
+      "name": "Masala Tadka Chach",
+      "category": "Extras & Beverages",
+      "description": "Chilled chach with masala tadka.",
+      "price": "₹50",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 62,
+      "name": "Sweet Dry Fruit Lassi",
+      "category": "Extras & Beverages",
+      "description": "Sweet lassi with dry fruits.",
+      "price": "₹60",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 63,
+      "name": "Kulhad Tea",
+      "category": "Extras & Beverages",
+      "description": "Everyday chai in a mitti kulhad.",
+      "price": "₹30",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 64,
+      "name": "Kulhad Ginger Tea",
+      "category": "Extras & Beverages",
+      "description": "Chai with fresh ginger, served in a kulhad.",
+      "price": "₹35",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 65,
+      "name": "Kulhad Tulsi Ginger Tea",
+      "category": "Extras & Beverages",
+      "description": "Tulsi and ginger chai in a mitti kulhad.",
+      "price": "₹45",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 66,
+      "name": "Papad",
+      "category": "Extras & Beverages",
+      "description": "Crisp papad for the side.",
+      "price": "₹12",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 67,
+      "name": "Desi Ghee Dry Fruit Suji Halwa",
+      "category": "Extras & Beverages",
+      "description": "Suji halwa with desi ghee and dry fruit.",
+      "price": "Half ₹170 · Full ₹270",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 68,
+      "name": "Namkeen Daliya with Ghee",
+      "category": "Extras & Beverages",
+      "description": "Savoury daliya finished with ghee.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 69,
+      "name": "Aloo Kuttu Mixed Pakoda (20 pcs.)",
+      "category": "Vrat Items",
+      "description": "Kuttu and potato pakoda for vrat days.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 70,
+      "name": "Dry Fruit Mix Makhane ki Kheer (500 ml.)",
+      "category": "Vrat Items",
+      "description": "Makhana kheer with dry fruit.",
+      "price": "₹200",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 71,
+      "name": "Dry Fruit Mix Sabudana Kheer (500 ml.)",
+      "category": "Vrat Items",
+      "description": "Sabudana kheer with dry fruit.",
+      "price": "₹135",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 72,
+      "name": "Dry Fruit Mix Samak Ke Chawal Ki Kheer (500 ml.)",
+      "category": "Vrat Items",
+      "description": "Samak rice kheer with dry fruit.",
+      "price": "₹130",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 73,
+      "name": "Sabudana Khichdi",
+      "category": "Vrat Items",
+      "description": "Soft sabudana khichdi with peanuts.",
+      "price": "Half ₹130 · Full ₹250",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 74,
+      "name": "Samak ke Chawal ka Pulao",
+      "category": "Vrat Items",
+      "description": "Samak rice pulao for vrat days.",
+      "price": "Half ₹90 · Full ₹170",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 75,
+      "name": "Vart Ki Sukhi Aloo ki Sabji",
+      "category": "Vrat Items",
+      "description": "Dry potato sabji for vrat.",
+      "price": "Half ₹70 · Full ₹135",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 76,
+      "name": "Vart ki Aloo Gravy Sabji",
+      "category": "Vrat Items",
+      "description": "Potato gravy made for vrat.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 77,
+      "name": "Vart ke liye Lauki ki Sabji",
+      "category": "Vrat Items",
+      "description": "Bottle-gourd sabji for vrat.",
+      "price": "Half ₹80 · Full ₹145",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 78,
+      "name": "4 Kuttu ki Poori with Aloo Sabji",
+      "category": "Vrat Items",
+      "description": "Kuttu pooris with aloo sabji.",
+      "price": "₹170",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 79,
+      "name": "Satvik Thali (No Onion Garlic)",
+      "category": "Vrat Items",
+      "description": "Yellow dal, 4 tawa ghee roti, chawal, jeera aloo and green salad.",
+      "price": "₹150",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 80,
+      "name": "Vart Ki Thali",
+      "category": "Vrat Items",
+      "description": "2 kuttu poori, samak pulao, dahi, aloo gravy, samak kheer and green salad.",
+      "price": "₹270",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 81,
+      "name": "Mithi Dry Fruit Lassi",
+      "category": "Vrat Items",
+      "description": "Sweet lassi with dry fruit.",
+      "price": "₹60",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 82,
+      "name": "Plain Curd (100 gm.)",
+      "category": "Vrat Items",
+      "description": "Plain curd, 100 gram serving.",
+      "price": "₹20",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    },
+    {
+      "id": 83,
+      "name": "Plain Curd (150 gm.)",
+      "category": "Vrat Items",
+      "description": "Plain curd, 150 gram serving.",
+      "price": "₹35",
+      "available": 1,
+      "imageUrl": "",
+      "featured": 0
+    }
+  ],
+  "enquiries": [],
+  "settings": {
+    "id": 1,
+    "businessName": "The Rasoi Veg. Cuisine",
+    "phone": "7467881994",
+    "location": "Haridwar, Uttarakhand, India",
+    "hours": "7:00 AM to 9:00 PM",
+    "pureVegetarian": 1,
+    "takeawayAvailable": 1,
+    "orderingNote": "Pure vegetarian · Cloud Kitchen · No Dine-In · Order on Zomato & Swiggy",
+    "zomatoUrl": "https://www.zomato.com/",
+    "swiggyUrl": "https://www.swiggy.com/",
+    "updatedAt": "2026-09-16T11:26:33.009Z"
+  }
+}

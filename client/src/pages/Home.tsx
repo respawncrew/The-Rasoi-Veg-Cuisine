@@ -166,7 +166,7 @@ export default function Home() {
   const businessQuery = trpc.business.info.useQuery();
 
   const business = businessQuery.data;
-  const phone = business?.phone || "8006771779";
+  const phone = business?.phone || "7467881994"; // 👈 Updated fallback to 7467881994
   const businessName = business?.businessName || "THE RASOI VEG. CUISINE";
   const location = business?.location || "Haridwar, Uttarakhand";
   const hours = business?.hours || "7:00 AM — 9:00 PM";

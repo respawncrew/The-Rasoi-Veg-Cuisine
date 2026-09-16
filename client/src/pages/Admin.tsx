@@ -1,6 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Check, ChevronDown, Eye, ImagePlus, LayoutDashboard, LogIn, MoreHorizontal, Pencil, Plus, Search, Settings2, Star, Trash2, Utensils, X, Power, Lock } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  Eye,
+  ImagePlus,
+  LayoutDashboard,
+  LogIn,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Search,
+  Settings2,
+  Star,
+  Trash2,
+  Utensils,
+  X,
+  Power,
+  Lock,
+  Loader2
+} from "lucide-react";
 import { menuCategories } from "@shared/menuSeed";
 import { trpc } from "@/lib/trpc";
 
@@ -24,9 +44,14 @@ export default function Admin() {
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<{
+    name: string;
+    category: (typeof menuCategories)[number];
+    description: string;
+    image: string;
+  }>({
     name: "",
-    category: "Thali",
+    category: menuCategories[0],
     description: "",
     image: ""
   });
@@ -34,7 +59,7 @@ export default function Admin() {
 
   const utils = trpc.useContext();
 
-  // Queries & Mutations
+  // --- Queries & Mutations ---
   const menuQuery = trpc.menu.list.useQuery(undefined, { enabled: isAuthenticated });
   const settingsQuery = trpc.business.info.useQuery(undefined, { enabled: isAuthenticated });
   const reviewsQuery = trpc.reviews.list.useQuery(undefined, { enabled: isAuthenticated });
@@ -78,7 +103,7 @@ export default function Admin() {
   const [settingsForm, setSettingsForm] = useState({
     id: 0,
     businessName: "The Rasoi Veg. Cuisine",
-    phone: "8006771779",
+    phone: "7467881994",
     location: "Haridwar, Uttarakhand, India",
     hours: "7:00 AM to 9:00 PM",
     orderingNote: "Pure vegetarian · Cloud Kitchen · No Dine-In · Order on Zomato & Swiggy",
@@ -97,7 +122,7 @@ export default function Admin() {
 
   const items: MenuItem[] = useMemo(() => {
     if (!menuQuery.data || !Array.isArray(menuQuery.data)) return [];
-    
+
     return menuQuery.data.map((item: any) => ({
       id: item.id,
       name: item.name || "Unnamed Dish",
@@ -118,7 +143,7 @@ export default function Admin() {
       setSettingsForm({
         id: settingsQuery.data.id,
         businessName: settingsQuery.data.businessName,
-        phone: settingsQuery.data.phone,
+        phone: settingsQuery.data.phone || "7467881994",
         location: settingsQuery.data.location,
         hours: settingsQuery.data.hours,
         orderingNote: settingsQuery.data.orderingNote ?? "",
@@ -137,6 +162,10 @@ export default function Admin() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size exceeds 5MB limit.");
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
@@ -149,16 +178,17 @@ export default function Admin() {
 
   const openAddModal = () => {
     setEditingItem(null);
-    setFormState({ name: "", category: "Thali", description: "", image: "" });
+    setFormState({ name: "", category: menuCategories[0], description: "", image: "" });
     setImagePreview(null);
     setShowForm(true);
   };
 
   const openEditModal = (item: MenuItem) => {
     setEditingItem(item);
+    const matchedCategory = menuCategories.find((c) => c === item.category) || menuCategories[0];
     setFormState({
       name: item.name,
-      category: item.category,
+      category: matchedCategory,
       description: item.description,
       image: item.image || ""
     });
@@ -169,11 +199,10 @@ export default function Admin() {
   const closeModal = () => {
     setShowForm(false);
     setEditingItem(null);
-    setFormState({ name: "", category: "Thali", description: "", image: "" });
+    setFormState({ name: "", category: menuCategories[0], description: "", image: "" });
     setImagePreview(null);
   };
 
-  // 💥 Image & Description are now OPTIONAL
   const handleSaveDish = () => {
     if (!formState.name.trim()) {
       alert("Kripya dish ka naam bharein.");
@@ -187,7 +216,6 @@ export default function Admin() {
       available: 1
     };
 
-    // Photo ho tabhi URL bhejenge
     if (formState.image) {
       payload.imageUrl = formState.image;
     }
@@ -203,13 +231,13 @@ export default function Admin() {
   };
 
   const handleDeleteDish = (id: number) => {
-    if (confirm("Are you sure you want to delete this dish?")) {
+    if (window.confirm("Are you sure you want to delete this dish?")) {
       deleteMenuMutation.mutate({ id });
     }
   };
 
   const handleDeleteReview = (id: number) => {
-    if (confirm("Kya aap is review ko delete karna chahte hain?")) {
+    if (window.confirm("Kya aap is review ko delete karna chahte hain?")) {
       deleteReviewMutation.mutate({ id });
     }
   };
@@ -254,6 +282,8 @@ export default function Admin() {
       </div>
     );
   }
+
+  const isSavingDish = createMenuMutation.isPending || updateMenuMutation.isPending;
 
   return (
     <div className="admin-shell">
@@ -310,7 +340,9 @@ export default function Admin() {
               </div>
               <div className="admin-table">
                 <div className="table-row table-head"><span>Dish</span><span>Category</span><span>Status</span><span>Actions</span></div>
-                {filtered.length === 0 ? (
+                {menuQuery.isLoading ? (
+                  <div className="p-8 text-center text-gray-500">Loading menu items...</div>
+                ) : filtered.length === 0 ? (
                   <div className="p-8 text-center text-gray-500">No dishes found in inventory.</div>
                 ) : (
                   filtered.map((item) => (
@@ -351,7 +383,9 @@ export default function Admin() {
             <div className="panel-heading">
               <div><h2>Customer Reviews</h2><p>Submitted reviews from users.</p></div>
             </div>
-            {!reviewsQuery.data || reviewsQuery.data.length === 0 ? (
+            {reviewsQuery.isLoading ? (
+              <p className="text-gray-500 py-4">Loading reviews...</p>
+            ) : !reviewsQuery.data || reviewsQuery.data.length === 0 ? (
               <p className="text-gray-500 py-4">No reviews submitted yet.</p>
             ) : (
               <div className="space-y-3">
@@ -428,7 +462,16 @@ export default function Admin() {
               <button className="icon-button" onClick={closeModal}><X size={18} /></button>
             </div>
             <label>Dish name *<input value={formState.name} onChange={(event) => setFormState({ ...formState, name: event.target.value })} placeholder="e.g. Special Paneer Thali" /></label>
-            <label>Category<select value={formState.category} onChange={(event) => setFormState({ ...formState, category: event.target.value })}>{menuCategories.map((category) => <option key={category}>{category}</option>)}</select></label>
+            <label>Category
+              <select 
+                value={formState.category} 
+                onChange={(event) => setFormState({ ...formState, category: event.target.value as (typeof menuCategories)[number] })}
+              >
+                {menuCategories.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+            </label>
             <label>Description (Optional)<textarea value={formState.description} onChange={(event) => setFormState({ ...formState, description: event.target.value })} placeholder="What makes it special?" /></label>
             
             <label className="upload-placeholder cursor-pointer block border-2 border-dashed rounded-lg p-4 text-center hover:bg-black/5 transition relative">
@@ -447,9 +490,10 @@ export default function Admin() {
             </label>
 
             <div className="modal-actions">
-              <button className="button button-outline" onClick={closeModal}>Cancel</button>
-              <button className="button button-burgundy" onClick={handleSaveDish} disabled={createMenuMutation.isPending || updateMenuMutation.isPending}>
-                <Check size={16} /> {editingItem ? "Update dish" : "Save dish"}
+              <button className="button button-outline" onClick={closeModal} disabled={isSavingDish}>Cancel</button>
+              <button className="button button-burgundy flex items-center gap-2" onClick={handleSaveDish} disabled={isSavingDish}>
+                {isSavingDish ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
+                {editingItem ? "Update dish" : "Save dish"}
               </button>
             </div>
           </div>

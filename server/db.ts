@@ -1,101 +1,136 @@
 import { eq, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 import { InsertUser, users, menuItems, categories, enquiries, reviews, businessSettings, InsertMenuItem } from "../drizzle/schema";
 import { ENV } from './_core/env';
 import { menuSeed } from "@shared/menuSeed";
+import fs from "fs";
+import path from "path";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+// Direct SQLite setup
+const sqlite = new Database("sqlite.db");
+export const db = drizzle(sqlite);
 
-// In-Memory Fallbacks for Offline/Development Mode
-const inMemoryReviews: any[] = [
-  { id: 1, name: "Aman Verma", quote: "Amazing food and super fast packaging!", rating: 5, approved: 1, createdAt: new Date() }
-];
+// File Persistence Helper for Offline/Local Dev Mode
+const STORAGE_FILE = path.join(process.cwd(), "data_store.json");
 
-// 💥 Auto-seed all 83+ dishes from menuSeed if in-memory is used
-const inMemoryMenu: any[] = menuSeed.map((item, index) => ({
-  id: index + 1,
-  name: item.name,
-  category: item.category,
-  description: item.description,
-  price: item.price,
-  available: 1,
-  imageUrl: "",
-  featured: item.tag === "Featured" ? 1 : 0,
-}));
+interface LocalData {
+  menu: any[];
+  reviews: any[];
+  enquiries: any[];
+  settings: typeof businessSettings.$inferSelect;
+}
 
-const inMemoryEnquiries: any[] = [];
-
-let inMemorySettings: typeof businessSettings.$inferSelect = {
-  id: 1,
-  businessName: "The Rasoi Veg. Cuisine",
-  phone: "8006771779",
-  location: "Haridwar, Uttarakhand, India",
-  hours: "7:00 AM to 9:00 PM",
-  pureVegetarian: 1,
-  takeawayAvailable: 1,
-  orderingNote: "Pure vegetarian · Cloud Kitchen · No Dine-In · Order on Zomato & Swiggy",
-  zomatoUrl: "https://www.zomato.com/",
-  swiggyUrl: "https://www.swiggy.com/",
-  updatedAt: new Date()
+// Initial Default Values
+const defaultData: LocalData = {
+  reviews: [
+    { id: 1, name: "Aman Verma", quote: "Amazing food and super fast packaging!", rating: 5, approved: 1, createdAt: new Date().toISOString() }
+  ],
+  menu: menuSeed.map((item, index) => ({
+    id: index + 1,
+    name: item.name,
+    category: item.category,
+    description: item.description,
+    price: item.price || "Ask us",
+    available: 1,
+    imageUrl: "",
+    featured: item.tag === "Featured" ? 1 : 0,
+  })),
+  enquiries: [],
+  settings: {
+    id: 1,
+    businessName: "The Rasoi Veg. Cuisine",
+    phone: "7467881994",
+    location: "Haridwar, Uttarakhand, India",
+    hours: "7:00 AM to 9:00 PM",
+    pureVegetarian: 1,
+    takeawayAvailable: 1,
+    orderingNote: "Pure vegetarian · Cloud Kitchen · No Dine-In · Order on Zomato & Swiggy",
+    zomatoUrl: "https://www.zomato.com/",
+    swiggyUrl: "https://www.swiggy.com/",
+    updatedAt: new Date().toISOString()
+  }
 };
 
-export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
-    try { 
-      _db = drizzle(process.env.DATABASE_URL); 
-    } catch (error) { 
-      console.warn("[Database] Failed to connect, using in-memory fallback:", error); 
-      _db = null; 
+// Load or Initialize File Storage
+function loadLocalStore(): LocalData {
+  try {
+    if (fs.existsSync(STORAGE_FILE)) {
+      const fileData = fs.readFileSync(STORAGE_FILE, "utf-8");
+      const parsed: LocalData = JSON.parse(fileData);
+      
+      if (parsed.settings && parsed.settings.phone === "8006771779") {
+        parsed.settings.phone = "7467881994";
+        saveLocalStore(parsed);
+      }
+      return parsed;
     }
+  } catch (err) {
+    console.warn("[Local Storage] Error reading data_store.json, using defaults:", err);
   }
-  return _db;
+  saveLocalStore(defaultData);
+  return defaultData;
+}
+
+function saveLocalStore(data: LocalData) {
+  try {
+    fs.writeFileSync(STORAGE_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch (err) {
+    console.error("[Local Storage] Failed to save local state:", err);
+  }
+}
+
+let localStore = loadLocalStore();
+
+export async function getDb() {
+  return db;
 }
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) throw new Error("User openId is required for upsert");
-  const db = await getDb();
-  if (!db) { console.warn("[Database] Cannot upsert user: database not available"); return; }
+  
   const values: InsertUser = { openId: user.openId };
-  const updateSet: Record<string, unknown> = {};
-  const textFields = ["name", "email", "loginMethod"] as const;
-  for (const field of textFields) { if (user[field] !== undefined) { values[field] = user[field] ?? null; updateSet[field] = user[field] ?? null; } }
-  if (user.lastSignedIn !== undefined) { values.lastSignedIn = user.lastSignedIn; updateSet.lastSignedIn = user.lastSignedIn; }
-  if (user.role !== undefined) { values.role = user.role; updateSet.role = user.role; } else if (user.openId === ENV.ownerOpenId) { values.role = 'admin'; updateSet.role = 'admin'; }
-  if (!values.lastSignedIn) values.lastSignedIn = new Date();
-  if (Object.keys(updateSet).length === 0) updateSet.lastSignedIn = new Date();
-  await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
+  if (user.name) values.name = user.name;
+  if (user.email) values.email = user.email;
+  if (user.loginMethod) values.loginMethod = user.loginMethod;
+  values.role = user.role ?? (user.openId === ENV.ownerOpenId ? 'admin' : 'user');
+
+  try {
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
+      set: values
+    });
+  } catch (error) {
+    console.error("[SQLite User Upsert Error]", error);
+  }
 }
 
 export async function getUserByOpenId(openId: string) {
-  const db = await getDb();
-  if (!db) return undefined;
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-  return result[0];
+  try {
+    const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+    return result[0];
+  } catch (error) {
+    return undefined;
+  }
 }
 
-// 💥 Auto-Seeds Database on First Fetch if DB is empty
 export async function listMenuItems() {
-  const db = await getDb();
-  if (!db) return inMemoryMenu;
-
   try {
     const dbItems = await db.select({ item: menuItems, category: categories.name })
       .from(menuItems)
       .leftJoin(categories, eq(menuItems.categoryId, categories.id))
       .orderBy(desc(menuItems.featured), menuItems.sortOrder);
 
-    // If Database is connected but empty, auto seed it with initial items
     if (dbItems.length === 0 && menuSeed.length > 0) {
-      console.log("[Database] Seeding 83+ initial menu items to Database...");
       for (const item of menuSeed) {
         await db.insert(menuItems).values({
           name: item.name,
           description: item.description,
-          price: item.price,
+          price: item.price || "Ask us",
           available: 1,
         });
       }
-      return listMenuItems(); // Re-fetch after seeding
+      return listMenuItems();
     }
 
     return dbItems.map(({ item, category }) => ({
@@ -109,129 +144,127 @@ export async function listMenuItems() {
       featured: item.featured
     }));
   } catch (error) {
-    console.error("[Database Error] Fetching menu failed, using fallback:", error);
-    return inMemoryMenu;
+    return localStore.menu;
   }
 }
 
 export async function createMenuItem(item: any) {
-  const db = await getDb();
-  if (!db) {
-    const newItem = { 
-      id: Date.now(), 
-      available: 1, 
-      name: item.name,
-      category: item.category || "Main Course",
-      description: item.description || "",
-      price: item.price || "Ask us",
-      imageUrl: item.imageUrl || ""
-    };
-    inMemoryMenu.unshift(newItem); // Add at top
+  const safeItem = {
+    name: item.name,
+    description: item.description || "Fresh & Authentic",
+    price: item.price ? String(item.price) : "Ask us",
+    imageUrl: item.imageUrl || "",
+    available: item.available ?? 1,
+  };
+
+  try {
+    const result = await db.insert(menuItems).values(safeItem).returning();
+    return result[0];
+  } catch (error) {
+    console.warn("[Database] SQLite Insert Error. Fallback to local store:", error);
+    const newItem = { id: Date.now(), ...safeItem, category: item.category || "Main Course" };
+    localStore.menu.unshift(newItem);
+    saveLocalStore(localStore);
     return newItem;
   }
-
-  await db.insert(menuItems).values({
-    name: item.name,
-    description: item.description,
-    price: item.price,
-    imageUrl: item.imageUrl,
-    available: item.available ?? 1,
-  });
-  return item;
 }
 
 export async function updateMenuItem(id: number, item: Partial<InsertMenuItem>) {
-  const db = await getDb();
-  if (!db) {
-    const index = inMemoryMenu.findIndex((i) => i.id === id);
+  try {
+    await db.update(menuItems).set(item).where(eq(menuItems.id, id));
+  } catch (error) {
+    console.warn("[Database] SQLite Update Error. Fallback to local store:", error);
+    const index = localStore.menu.findIndex((i) => Number(i.id) === Number(id));
     if (index !== -1) {
-      inMemoryMenu[index] = { ...inMemoryMenu[index], ...item };
+      localStore.menu[index] = { ...localStore.menu[index], ...item };
+      saveLocalStore(localStore);
     }
-    return { id, ...item };
   }
-  await db.update(menuItems).set(item).where(eq(menuItems.id, id));
   return { id, ...item };
 }
 
 export async function deleteMenuItem(id: number) {
-  const db = await getDb();
-  if (!db) {
-    const index = inMemoryMenu.findIndex((i) => i.id === id);
-    if (index !== -1) inMemoryMenu.splice(index, 1);
-    return { id };
+  try {
+    await db.delete(menuItems).where(eq(menuItems.id, id));
+  } catch (error) {
+    console.warn("[Database] SQLite Delete Error. Fallback to local store delete:", error);
+    localStore.menu = localStore.menu.filter((i) => Number(i.id) !== Number(id));
+    saveLocalStore(localStore);
   }
-  await db.delete(menuItems).where(eq(menuItems.id, id));
   return { id };
 }
 
 export async function createEnquiry(input: { name: string; phone: string; message?: string }) {
-  const db = await getDb();
-  if (!db) {
-    inMemoryEnquiries.push({ id: Date.now(), ...input });
-    return { success: true };
+  try {
+    await db.insert(enquiries).values(input);
+  } catch (error) {
+    localStore.enquiries.push({ id: Date.now(), ...input });
+    saveLocalStore(localStore);
   }
-  await db.insert(enquiries).values(input);
   return { success: true };
 }
 
 export async function createReview(input: { name: string; quote: string; rating: number }) {
-  const db = await getDb();
-  if (!db) {
-    inMemoryReviews.unshift({
+  try {
+    await db.insert(reviews).values({
+      name: input.name,
+      quote: input.quote,
+      rating: input.rating,
+      approved: 1,
+    });
+  } catch (error) {
+    localStore.reviews.unshift({
       id: Date.now(),
       name: input.name,
       quote: input.quote,
       rating: input.rating,
       approved: 1,
-      createdAt: new Date()
+      createdAt: new Date().toISOString()
     });
-    return { success: true };
+    saveLocalStore(localStore);
   }
-  await db.insert(reviews).values({
-    name: input.name,
-    quote: input.quote,
-    rating: input.rating,
-    approved: 1,
-  });
   return { success: true };
 }
 
 export async function listReviews(approvedOnly = true) {
-  const db = await getDb();
-  if (!db) {
-    return approvedOnly ? inMemoryReviews.filter(r => r.approved === 1) : inMemoryReviews;
+  try {
+    return await db.select().from(reviews).where(approvedOnly ? eq(reviews.approved, 1) : undefined).orderBy(desc(reviews.createdAt));
+  } catch (error) {
+    return approvedOnly ? localStore.reviews.filter(r => r.approved === 1) : localStore.reviews;
   }
-  return db.select().from(reviews).where(approvedOnly ? eq(reviews.approved, 1) : undefined).orderBy(desc(reviews.createdAt));
 }
 
 export async function deleteReview(id: number) {
-  const db = await getDb();
-  if (!db) {
-    const index = inMemoryReviews.findIndex((r) => r.id === id);
-    if (index !== -1) inMemoryReviews.splice(index, 1);
-    return { id };
+  try {
+    await db.delete(reviews).where(eq(reviews.id, id));
+  } catch (error) {
+    console.warn("[Database] SQLite Delete Review Error. Fallback to local store:", error);
+    localStore.reviews = localStore.reviews.filter((r) => Number(r.id) !== Number(id));
+    saveLocalStore(localStore);
   }
-  await db.delete(reviews).where(eq(reviews.id, id));
   return { id };
 }
 
 export async function getBusinessSettings() {
-  const db = await getDb();
-  if (!db) return inMemorySettings;
-  const result = await db.select().from(businessSettings).limit(1);
-  return result[0] || inMemorySettings;
+  try {
+    const result = await db.select().from(businessSettings).limit(1);
+    return result[0] || localStore.settings;
+  } catch (error) {
+    return localStore.settings;
+  }
 }
 
 export async function updateBusinessSettings(id: number, input: Partial<typeof businessSettings.$inferInsert>) {
-  const db = await getDb();
-  if (!db) {
-    inMemorySettings = { 
-      ...inMemorySettings, 
+  try {
+    await db.update(businessSettings).set(input).where(eq(businessSettings.id, id));
+  } catch (error) {
+    console.warn("[Database] SQLite Update Settings Error. Fallback to local store:", error);
+    localStore.settings = { 
+      ...localStore.settings, 
       ...input,
-      orderingNote: input.orderingNote ?? inMemorySettings.orderingNote 
+      orderingNote: input.orderingNote ?? localStore.settings.orderingNote 
     };
-    return inMemorySettings;
+    saveLocalStore(localStore);
   }
-  await db.update(businessSettings).set(input).where(eq(businessSettings.id, id));
-  return { id, ...input };
+  return localStore.settings;
 }

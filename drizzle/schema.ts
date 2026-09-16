@@ -1,72 +1,92 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+// 1. USERS TABLE
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  openId: text("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
-  email: varchar("email", { length: 320 }),
-  loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  email: text("email", { length: 320 }),
+  loginMethod: text("loginMethod", { length: 64 }),
+  role: text("role", { enum: ["user", "admin"] }).default("user").notNull(),
+  createdAt: text("createdAt").default("CURRENT_TIMESTAMP").notNull(),
+  updatedAt: text("updatedAt").default("CURRENT_TIMESTAMP").notNull(),
+  lastSignedIn: text("lastSignedIn").default("CURRENT_TIMESTAMP").notNull(),
 });
 
-export const categories = mysqlTable("categories", {
-  id: int("id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 80 }).notNull().unique(),
-  sortOrder: int("sortOrder").default(0).notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+// 2. CATEGORIES TABLE
+export const categories = sqliteTable("categories", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name", { length: 80 }).notNull().unique(),
+  sortOrder: integer("sortOrder").default(0).notNull(),
+  createdAt: text("createdAt").default("CURRENT_TIMESTAMP").notNull(),
 });
 
-export const menuItems = mysqlTable("menuItems", {
-  id: int("id").autoincrement().primaryKey(),
-  categoryId: int("categoryId"),
-  name: varchar("name", { length: 120 }).notNull(),
+// 3. MENU ITEMS TABLE
+export const menuItems = sqliteTable("menuItems", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  categoryId: integer("categoryId"),
+  name: text("name", { length: 120 }).notNull(),
   description: text("description").notNull(),
-  price: varchar("price", { length: 80 }),
+  price: text("price", { length: 80 }),
   imageUrl: text("imageUrl"),
-  available: int("available").default(1).notNull(),
-  featured: int("featured").default(0).notNull(),
-  sortOrder: int("sortOrder").default(0).notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  available: integer("available").default(1).notNull(),
+  featured: integer("featured").default(0).notNull(),
+  sortOrder: integer("sortOrder").default(0).notNull(),
+  createdAt: text("createdAt").default("CURRENT_TIMESTAMP").notNull(),
+  updatedAt: text("updatedAt").default("CURRENT_TIMESTAMP").notNull(),
 });
 
-export const enquiries = mysqlTable("enquiries", {
-  id: int("id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 120 }).notNull(),
-  phone: varchar("phone", { length: 30 }).notNull(),
+// 4. ENQUIRIES TABLE
+export const enquiries = sqliteTable("enquiries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name", { length: 120 }).notNull(),
+  phone: text("phone", { length: 30 }).notNull(),
   message: text("message"),
-  status: mysqlEnum("status", ["new", "contacted", "closed"]).default("new").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  status: text("status", { enum: ["new", "contacted", "closed"] }).default("new").notNull(),
+  createdAt: text("createdAt").default("CURRENT_TIMESTAMP").notNull(),
 });
 
-export const reviews = mysqlTable("reviews", {
-  id: int("id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 120 }).notNull(),
+// 5. REVIEWS TABLE
+export const reviews = sqliteTable("reviews", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name", { length: 120 }).notNull(),
   quote: text("quote").notNull(),
-  rating: int("rating").default(5).notNull(),
-  source: varchar("source", { length: 60 }),
-  approved: int("approved").default(0).notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  rating: integer("rating").default(5).notNull(),
+  source: text("source", { length: 60 }),
+  approved: integer("approved").default(0).notNull(),
+  createdAt: text("createdAt").default("CURRENT_TIMESTAMP").notNull(),
 });
 
-export const businessSettings = mysqlTable("businessSettings", {
-  id: int("id").autoincrement().primaryKey(),
-  businessName: varchar("businessName", { length: 160 }).notNull(),
-  phone: varchar("phone", { length: 30 }).notNull(),
-  location: varchar("location", { length: 160 }).notNull(),
-  hours: varchar("hours", { length: 160 }).notNull(),
-  pureVegetarian: int("pureVegetarian").default(1).notNull(),
-  takeawayAvailable: int("takeawayAvailable").default(1).notNull(),
-  orderingNote: varchar("orderingNote", { length: 240 }),
+// 6. BUSINESS SETTINGS TABLE
+export const businessSettings = sqliteTable("businessSettings", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  businessName: text("businessName", { length: 160 }).notNull(),
+  phone: text("phone", { length: 30 }).notNull(),
+  location: text("location", { length: 160 }).notNull(),
+  hours: text("hours", { length: 160 }).notNull(),
+  pureVegetarian: integer("pureVegetarian").default(1).notNull(),
+  takeawayAvailable: integer("takeawayAvailable").default(1).notNull(),
+  orderingNote: text("orderingNote", { length: 240 }),
   zomatoUrl: text("zomatoUrl"),
   swiggyUrl: text("swiggyUrl"),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: text("updatedAt").default("CURRENT_TIMESTAMP").notNull(),
 });
 
+// TYPES FOR TS ENFORCEMENT
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
+
+export type Category = typeof categories.$inferSelect;
+export type InsertCategory = typeof categories.$inferInsert;
+
 export type MenuItem = typeof menuItems.$inferSelect;
 export type InsertMenuItem = typeof menuItems.$inferInsert;
+
+export type Enquiry = typeof enquiries.$inferSelect;
+export type InsertEnquiry = typeof enquiries.$inferInsert;
+
+export type Review = typeof reviews.$inferSelect;
+export type InsertReview = typeof reviews.$inferInsert;
+
+export type BusinessSetting = typeof businessSettings.$inferSelect;
+export type InsertBusinessSetting = typeof businessSettings.$inferInsert;

@@ -30,20 +30,19 @@ export const appRouter = router({
   menu: router({
     list: publicProcedure.query(() => listMenuItems()),
     
-    // 💥 publicProcedure used so local/admin mutation passes without 403 error
     create: publicProcedure.input(z.object({ 
       name: z.string().min(1), 
       description: z.string().optional().default(""), 
       category: z.string().optional(),
       categoryId: z.union([z.number(), z.string()]).optional(), 
-      price: z.string().optional().default("0"), 
+      price: z.string().optional().default("Ask us"), 
       imageUrl: z.string().optional().default(""), 
       available: z.union([z.number(), z.boolean()]).optional(), 
       featured: z.number().optional() 
     })).mutation(({ input }: any) => createMenuItem(input)),
     
     update: publicProcedure.input(z.object({ 
-      id: z.number(), 
+      id: z.union([z.number(), z.string()]).transform(v => Number(v)), 
       name: z.string().optional(), 
       description: z.string().optional(), 
       category: z.string().optional(),
@@ -57,7 +56,10 @@ export const appRouter = router({
       return updateMenuItem(id, changes); 
     }),
     
-    remove: publicProcedure.input(z.object({ id: z.number() })).mutation(({ input }) => deleteMenuItem(input.id)),
+    // 🟢 Flexibly handles both string/number IDs from front-end
+    remove: publicProcedure.input(z.object({ 
+      id: z.union([z.number(), z.string()]).transform(v => Number(v)) 
+    })).mutation(({ input }) => deleteMenuItem(input.id)),
   }),
 
   enquiries: router({
@@ -80,24 +82,27 @@ export const appRouter = router({
     })).mutation(({ input }) => createReview(input)),
 
     remove: publicProcedure
-      .input(z.object({ id: z.number() }))
+      .input(z.object({ id: z.union([z.number(), z.string()]).transform(v => Number(v)) }))
       .mutation(({ input }) => deleteReview(input.id)),
   }),
 
   business: router({
     info: publicProcedure.query(() => getBusinessSettings()),
     update: publicProcedure.input(z.object({ 
-      id: z.number(), 
-      businessName: z.string().min(2), 
-      phone: z.string().min(7), 
-      location: z.string().min(2), 
-      hours: z.string().min(3), 
-      pureVegetarian: z.number().min(0).max(1), 
-      takeawayAvailable: z.number().min(0).max(1), 
-      orderingNote: z.string().max(240).optional(), 
-      zomatoUrl: z.string().url().optional(), 
-      swiggyUrl: z.string().url().optional() 
-    })).mutation(({ input }) => { const { id, ...changes } = input; return updateBusinessSettings(id, changes); }),
+      id: z.union([z.number(), z.string()]).optional().default(1).transform(v => Number(v)), 
+      businessName: z.string().min(1).optional(), 
+      phone: z.string().min(1).optional(), 
+      location: z.string().optional(), 
+      hours: z.string().optional(), 
+      pureVegetarian: z.union([z.number(), z.boolean()]).transform(v => typeof v === 'boolean' ? (v ? 1 : 0) : v).optional(), 
+      takeawayAvailable: z.union([z.number(), z.boolean()]).transform(v => typeof v === 'boolean' ? (v ? 1 : 0) : v).optional(), 
+      orderingNote: z.string().optional().nullable(), 
+      zomatoUrl: z.union([z.string().url(), z.string().length(0)]).optional().nullable(), 
+      swiggyUrl: z.union([z.string().url(), z.string().length(0)]).optional().nullable() 
+    })).mutation(({ input }: any) => { 
+      const { id = 1, ...changes } = input; 
+      return updateBusinessSettings(id, changes); 
+    }),
   }),
 });
 
